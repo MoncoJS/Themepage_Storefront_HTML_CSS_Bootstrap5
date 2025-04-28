@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #333;
+            --secondary-color: #777;
+            --accent-color: #d9bf8f;
+            --light-bg: #f8f9fa;
+            --dark-bg: #212529;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+        
+        /* Utilities */
+        .text-accent {
+            color: var(--accent-color);
+        }
+        
+        .bg-accent {
+            background-color: var(--accent-color);
+        }
+        
+        /* Header & Navigation */
+        .navbar {
+            padding: 1.2rem 0;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -1px;
+        }
+        
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin: 0 0.5rem;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            padding: 5rem 0;
+            background-color: var(--light-bg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background-color: rgba(217, 191, 143, 0.1);
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease;
+        }
+        
+        .hero-image:hover {
+            transform: translateY(-10px);
+        }
+        
+        .cabinet {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        /* Category Section */
+        .category-section {
+            padding: 6rem 0;
+        }
+        
+        .category-title {
+            font-weight: 700;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+        
+        .category-description {
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .category-card {
+            position: relative;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            height: 280px;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+            z-index: 1;
+        }
+        
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .category-card .category-label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .category-card .btn-shop {
+            position: absolute;
+            left: 50%;
+            top: 65%;
+            transform: translate(-50%, 20px);
+            opacity: 0;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .category-card:hover .btn-shop {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        
+        /* Products Section */
+        .product-section {
+            padding: 5rem 0;
+            background-color: var(--light-bg);
+        }
+        
+        .section-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        
+        .product-card {
+            margin-bottom: 2.5rem;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img-container {
+            background-color: white;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-img {
+            max-height: 85%;
+            max-width: 85%;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+        
+        .product-actions {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            transition: bottom 0.3s ease;
+        }
+ 
+        .product-action-btn {
+            margin: 0 0.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .product-action-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .product-name {
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+        }
+        
+        .sale-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        /* Feature Section */
+        .feature-section {
+            padding: 6rem 0;
+        }
+        
+        .feature-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        
+        .feature-text {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c0a778;
+            border-color: #c0a778;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-link:hover {
+            color: #c0a778;
+        }
+        
+        /* Instagram Section */
+        .instagram-section {
+            padding: 6rem 0;
+            background-color: var(--light-bg);
+        }
+        
+        .instagram-grid {
+            margin-bottom: 2rem;
+        }
+        
+        .instagram-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .instagram-item img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .instagram-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .instagram-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .instagram-item:hover .instagram-overlay {
+            opacity: 1;
+        }
+        
+        .instagram-icon {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .instagram-handle {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .instagram-description {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .instagram-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-follow {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-follow:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Newsletter */
+        .newsletter-section {
+            padding: 5rem 0;
+            background-color: var(--dark-bg);
+            color: white;
+        }
+        
+        .newsletter-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .newsletter-text {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .newsletter-form {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            border: none;
+            font-size: 1rem;
+            padding-right: 160px;
+        }
+        
+        .newsletter-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            background-color: #c0a778;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 4rem 0 2rem;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-about {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-about img {
+            max-width: 120px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-about p {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            margin-right: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .footer-contact {
+            margin-bottom: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .contact-item i {
+            min-width: 20px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 991px) {
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+            
+            .category-title {
+                font-size: 2.5rem;
+            }
+            
+            .feature-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero-content {
+                text-align: center;
+                margin-top: 2rem;
+            }
+            
+            .category-title {
+                font-size: 2rem;
+                text-align: center;
+            }
+            
+            .category-description {
+                text-align: center;
+            }
+            
+            .instagram-handle {
+                font-size: 1.8rem;
+                text-align: center;
+                margin-top: 2rem;
+            }
+            
+            .instagram-description {
+                text-align: center;
+            }
+            
+            .instagram-text {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">SHOP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">BLOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CONTACT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CONNECT</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">LOGIN</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">SAVED ITEMS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">0 / $0.00</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="hero-image">
+                        <img src="https://placehold.co/900x400" alt="Low Cabinet" class="cabinet img-fluid">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="hero-content">
+                        <h1>Simple <span class="text-accent">Themepage</span></h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, error.</p>
+                        <a href="#" class="btn btn-primary">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="category-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h2 class="category-title">New In<br>Store</h2>
+                    <p class="category-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio repudiandae saepe consequatur, possimus aspernatur magnam. Provident repellat officia vel consectetur magni. Labore, facilis? Reprehenderit, quisquam harum!</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="category-card">
+                                <div class="category-overlay"></div>
+                                <img src="https://placehold.co/400x500/f8d568/ffffff" alt="Furniture Category">
+                                <div class="category-label">FURNITURE</div>
+                                <a href="#" class="btn btn-shop">Shop Now</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-card">
+                                <div class="category-overlay"></div>
+                                <img src="https://placehold.co/400x500/f8b7c1/ffffff" alt="Lighting Category">
+                                <div class="category-label">LIGHTING</div>
+                                <a href="#" class="btn btn-shop">Shop Now</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-card">
+                                <div class="category-overlay"></div>
+                                <img src="https://placehold.co/400x500/d9d9d9/ffffff" alt="Accessories Category">
+                                <div class="category-label">ACCESSORIES</div>
+                                <a href="#" class="btn btn-shop">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="product-section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <p class="section-subtitle">TRENDING NOW</p>
+                <h3 class="product-section-title">SHOP BEST SELLERS</h3>
+            </div>
+            <div class="row">
+                <!-- Product 1 -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card product-card">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300" alt="Spine Barstool" class="product-img">
+                            <div class="product-actions">
+                                <a href="#" class="product-action-btn"><i class="fas fa-shopping-cart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-heart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="product-name">SPINE BARSTOOL</p>
+                            <p class="product-price">$1,195.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card product-card">
+                        <div class="product-img-container">
+                            <span class="sale-badge">SALE</span>
+                            <img src="https://placehold.co/300x300" alt="Icicle Triangular Table" class="product-img">
+                            <div class="product-actions">
+                                <a href="#" class="product-action-btn"><i class="fas fa-shopping-cart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-heart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="product-name">ICICLE - TRIANGULAR</p>
+                            <p class="product-price">$850.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card product-card">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300" alt="Sugar Pot" class="product-img">
+                            <div class="product-actions">
+                                <a href="#" class="product-action-btn"><i class="fas fa-shopping-cart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-heart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="product-name">SUGAR POT</p>
+                            <p class="product-price">$10.00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card product-card">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300" alt="Upholstered Sofa" class="product-img">
+                            <div class="product-actions">
+                                <a href="#" class="product-action-btn"><i class="fas fa-shopping-cart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-heart"></i></a>
+                                <a href="#" class="product-action-btn"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="product-name">UPHOLSTERED SOFA</p>
+                            <p class="product-price">$5,295.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="https://placehold.co/500x300" alt="Feature Design" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <p class="text-uppercase mb-1">FEATURE, PRODUCT DESIGN</p>
+                    <h3 class="feature-title">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos, debitis!</h3>
+                    <p class="feature-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis nesciunt reiciendis maiores vitae ullam? Ipsam mollitia voluptates corporis eius officia?</p>
+                    <a href="#" class="btn btn-link ps-0">Read more</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row instagram-grid">
+                        <div class="col-md-4">
+                            <img src="https://placehold.co/280x250" alt="Instagram Image 1" class="img-fluid">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://placehold.co/280x250" alt="Instagram Image 2" class="img-fluid">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://placehold.co/280x250" alt="Instagram Image 3" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="instagram-handle">@simple.form</h4>
+                    <p class="instagram-description">INSTAGRAM</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, eligendi minus officia velit sit recusandae asperiores sed excepturi. Quae aliquid facilis, sequi quod dicta eum recusandae, debitis ex consectetur mollitia reiciendis delectus corrupti impedit in saepe alias. Esse illum harum doloribus id nemo modi ea laborum voluptatum. Eaque, a numquam?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>PRIVACY POLICY / DISCLAIMER / TERMS & CONDITIONS / SITE BY Simple.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>www.simple.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
